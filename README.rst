@@ -2,9 +2,8 @@
 conformalmapping-py
 ===================
 
-Unofficial Python port of the
-[conformalmapping](https://github.com/tobydriscoll/conformalmapping)  MATLAB
-toolbox
+Unofficial Python port of the `conformalmapping
+<https://github.com/tobydriscoll/conformalmapping>`_  MATLAB toolbox
 
 License
 =======
