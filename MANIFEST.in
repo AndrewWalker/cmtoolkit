@@ -2,4 +2,3 @@ include README.rst
 include LICENSE
 include LICENSE.conformalmappingtoolbox
 recursive-include conformalmapping *.py
-exclude tests
