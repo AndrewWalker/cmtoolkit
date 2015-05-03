@@ -6,6 +6,7 @@ from .homog import Homog
 from .closedcurve import ClosedCurve
 from .circle import Circle
 from .zline import Zline
+from .splinep import Splinep
 
 # Maps
 from .conformalmap import ConformalMap
