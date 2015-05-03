@@ -9,6 +9,13 @@ class TestCircle(unittest.TestCase):
         with self.assertRaises(Exception):
             c = Circle(center = 0.0 + 0.0j, radius = -1)
 
+    def test_boundbox(self):
+        c = Circle(center = 0.0 + 0.0j, radius = 1.0)
+        box = c.boundbox()
+
+        # by inspection three decimal place seems ok
+        assert_allclose(box, np.array([-1.0, 1.0, -1.0, 1.0]), 3)
+
     def test_fromVector(self):
         c = Circle.from_vector([1.0, 1.0j, -1.0])
         self.assertAlmostEqual(c.radius, 1.0)
