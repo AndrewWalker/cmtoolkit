@@ -37,19 +37,16 @@ class TestCircle(unittest.TestCase):
         self.assertAlmostEqual(c.dist(2.0j), 1.0)
         self.assertAlmostEqual(c.dist(3.0j), 2.0)
 
-    def test_inside_circle(self):
+    def test_isinside(self):
         c = Circle.from_vector([1.0, 1.0j, -1.0])
-        self.assertAlmostEqual(True, c.isinside(0.5))
-        self.assertAlmostEqual(True, c.isinside(-0.5))
-        self.assertAlmostEqual(True, c.isinside(0.5j))
-        self.assertAlmostEqual(True, c.isinside(-0.5j))
 
-    def test_outside_circle(self):
-        c = Circle.from_vector([1.0, 1.0j, -1.0])
-        self.assertAlmostEqual(False, c.isinside(2))
-        self.assertAlmostEqual(False, c.isinside(-2))
-        self.assertAlmostEqual(False, c.isinside(2j))
-        self.assertAlmostEqual(False, c.isinside(-2j))
+        # clearly inside
+        for iv in [0.5, -0.5, 0.5j, -0.5j]:
+            self.assertEqual(True, c.isinside(iv))
+
+        # clearly outside
+        for ov in [2.0, -2.0, 2.0j, -2.0j]:
+            self.assertEqual(False, c.isinside(ov))
 
     def test_threePointCheck(self):
         c = Circle.from_points(0, 5, 7j)
