@@ -10,7 +10,7 @@ Unofficial Python port of the Toby Driscoll's MATLAB `Conformal Mapping Toolkit
 Installation
 ============
 
-The latest version of this packages can be installed from github
+The latest version of this package can be installed from github
 
 .. code-block:: console
 
