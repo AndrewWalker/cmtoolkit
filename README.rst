@@ -2,8 +2,8 @@
 conformalmapping-py
 ===================
 
-Unofficial Python port of the `conformalmapping
-<https://github.com/tobydriscoll/conformalmapping>`_  MATLAB toolbox
+Unofficial Python port of the Toby Driscoll's `Conformal Mapping Toolkit (CMToolkit)
+<https://github.com/tobydriscoll/conformalmapping>`_, written in MATLAB.  
 
 License
 =======
