@@ -49,7 +49,6 @@ class Mobius(MobiusBase):
             else:
                 #zp = self.applyMap( z.point(np.array([0.5, 1.0, 1.5]) * np.pi ) )
                 zs = z.point(np.array([0.0, 0.25, 0.75]) )
-                print zs
                 zp = self.applyMap( zs )
                 return Circle.from_vector(zp)
         else:

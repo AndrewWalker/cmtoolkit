@@ -25,7 +25,6 @@ class Region(object):
 
     @property
     def outer(self):
-        print 'outer', len(self._outerboundaries)
         if len(self._outerboundaries) == 1:
             return self._outerboundaries[0]
         else:
