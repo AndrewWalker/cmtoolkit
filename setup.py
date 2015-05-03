@@ -28,7 +28,6 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
     ],
     tests_require=[] if PYTHON3 else ['unittest2'],
     test_suite='tests' if PYTHON3 else 'unittest2.collector'
