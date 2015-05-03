@@ -1,6 +1,6 @@
-===================
-conformalmapping-py
-===================
+=========
+cmtoolkit
+=========
 
 This software is a Python library for building and manipulating `conformal maps
 <http://en.wikipedia.org/wiki/Conformal_map>`_. Conformal mapping is an
@@ -20,7 +20,7 @@ The latest version of this package can be installed from github
 
 .. code-block:: console
 
-    $ pip install git+git://github.com/AndrewWalker/conformalmapping-py
+    $ pip install git+git://github.com/AndrewWalker/cmtoolkit
 
 License
 =======
@@ -32,6 +32,6 @@ Delaware in any way.
 Users of this software must comply with the `license <LICENSE>`_ for this package, and the
 `CMToolkit's license <LICENSE.conformalmappingtoolbox>`_
 
-.. |build_status| image:: https://api.travis-ci.org/AndrewWalker/conformalmapping-py.png
-   :target: https://travis-ci.org/AndrewWalker/conformalmapping-py
+.. |build_status| image:: https://api.travis-ci.org/AndrewWalker/cmtoolkit.png
+   :target: https://travis-ci.org/AndrewWalker/cmtoolkit
    :alt: Current build status

@@ -16,14 +16,14 @@ else:
     extras['test_suite'] = 'unittest2.collector'
 
 setup(
-    name         = 'conformalmapping',
+    name         = 'cmtoolkit',
     version      = '0.0.1',
-    description  = 'Conformal Mapping Toolbox (ported to Python)',
+    description  = 'Conformal Mapping Toolkit (ported to Python)',
     long_description = read('README.rst'),
     author       = 'Andrew Walker',
     author_email = 'walker.ab@gmail.com',
     packages     = find_packages(exclude=('tests',)),
-    url          = "http://github.com/AndrewWalker/conformalmapping-py",
+    url          = "http://github.com/AndrewWalker/cmtoolkit",
     license      = "BSD",
     classifiers  = [
         'Development Status :: 1 - Planning',
