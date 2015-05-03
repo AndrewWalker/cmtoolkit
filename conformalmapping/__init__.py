@@ -8,6 +8,7 @@ from .circle import Circle
 from .zline import Zline
 
 # Maps
+from .conformalmap import ConformalMap
 from .mobius import Mobius
 
 # Regions
