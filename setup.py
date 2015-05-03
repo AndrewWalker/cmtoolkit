@@ -7,7 +7,13 @@ def read(filename):
     contents = open(path).read()
     return contents
 
-PYTHON3 = sys.version_info[0] > 2
+# Python version specific setup
+extras = {}
+if sys.version_info[0] >= (3,):
+    extras['test_suite'] = 'tests'
+else:
+    extras['tests_require'] = ['unittest2']
+    extras['test_suite'] = 'unittest2.testcollector'
 
 setup(
     name         = 'conformalmapping',
@@ -16,7 +22,7 @@ setup(
     long_description = read('README.rst'),
     author       = 'Andrew Walker',
     author_email = 'walker.ab@gmail.com',
-    packages     = find_packages(),
+    packages     = find_packages(exclude=('tests',)),
     url          = "http://github.com/AndrewWalker/conformalmapping-py",
     license      = "BSD",
     classifiers  = [
@@ -29,6 +35,5 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
     ],
-    tests_require=[] if PYTHON3 else ['unittest2'],
-    test_suite='tests' if PYTHON3 else 'unittest2.collector'
+    **extras
 )
