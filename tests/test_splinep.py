@@ -1,8 +1,13 @@
 import unittest
-import numpy 
+import numpy as np
+from numpy.testing import *
 from conformalmapping import *
 
 class TestSplinep(unittest.TestCase):
+
+    # TODO - reconsider implementing this in terms of data loaded
+    #        from a MATLAB workspace. It would make doing a wider
+    #        range of tests (and regressions) much simpler
 
     def setUp(self):
         # we'll specifically choose the example points given 
@@ -20,51 +25,39 @@ class TestSplinep(unittest.TestCase):
               1.5838 - 0.7013j,
               1.3141 + 0.4008j,
               0.8474 + 0.7291j ]
+        self.spline = Splinep.from_complex_list(self.pts)
 
     def test_shape(self):
-        s = Splinep.from_complex_list(self.pts)
-        self.assertEquals(len(s.zpts), 13)
+        self.assertEqual(len(self.spline.zpts), 13)
 
     def test_translation(self):
-        s = Splinep.from_complex_list([0, 1, 1j])
-        t = s + complex(1, 1)
+        t = self.spline + complex(1, 1)
 
     def test_chordlength(self): 
-        s = Splinep.from_complex_list(self.pts)
-        self.assertAlmostEquals(s.chordalArcLength, 9.2018, 4)
-        self.assertAlmostEquals(s.arclength(), 9.2018, 4)
+        self.assertAlmostEqual(self.spline.chordalArcLength, 9.2018, 4)
+        self.assertAlmostEqual(self.spline.arclength(), 9.2018, 4)
 
     def test_point0(self):
-        s = Splinep.from_complex_list(self.pts)
-        self.assertAlmostEquals(s.point(0), self.pts[0])
+        self.assertAlmostEqual(self.spline.point(0), self.pts[0])
 
     def test_multi_point0(self):
-        s = Splinep.from_complex_list(self.pts)
         ts = [0., 0.]
         ps = [ self.pts[0], self.pts[0] ]
-        qs = s.point(ts)
-        self.assertAlmostEquals(ps[0], qs[0])
-        self.assertAlmostEquals(ps[1], qs[1])
+        qs = self.spline.point(ts)
+        self.assertAlmostEqual(ps[0], qs[0])
+        self.assertAlmostEqual(ps[1], qs[1])
 
     def test_second0(self):
-        s = Splinep.from_complex_list(self.pts)
-        out = s.second(0)
-        res = numpy.complex(-1.0476e+02, - 7.9734e+01)
-
-        self.assertAlmostEquals(out.imag, res.imag, 2)
-        self.assertAlmostEquals(out.real, res.real, 2)
+        out = self.spline.second(0)
+        res = -1.0476e+02 -7.9734e+01j
+        assert_allclose(out, res, 2)
 
     def test_tangent0(self):
-        s = Splinep.from_complex_list(self.pts)
-        out = s.tangent(0)
-        res = numpy.complex(-4.9952, 7.8044)
-
-        self.assertAlmostEquals(out.imag, res.imag, 2)
-        self.assertAlmostEquals(out.real, res.real, 2)
-
+        out = self.spline.tangent(0)
+        res = np.complex(-4.9952, 7.8044)
+        assert_allclose(out, res, 3)
 
     def test_splineParams(self):
-        s = Splinep.from_complex_list(self.pts)
-        pp = s.ppArray
-        self.assertEquals(len(pp.keys()), 6)
+        pp = self.spline.ppArray
+        self.assertEqual(len(pp.keys()), 6)
 

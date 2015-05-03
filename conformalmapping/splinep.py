@@ -1,11 +1,13 @@
-from .closedcurve import ClosedCurve
-
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except:
+    from io import StringIO
 import numpy as np
 import scipy.sparse
 import scipy.sparse.linalg
 import scipy.interpolate 
 from scipy.interpolate import PPoly
+from .closedcurve import ClosedCurve
 
 class Splinep(ClosedCurve):
     def __init__(self, xk, yk):
@@ -31,6 +33,18 @@ class Splinep(ClosedCurve):
     @classmethod
     def from_two_vectors(cls, xs, ys):
         return Splinep(xs, ys)
+
+    @property
+    def xpts(self):
+        return list(self.__xk)
+
+    @property
+    def ypts(self):
+        return list(self.__yk)
+
+    @property
+    def zpts(self):
+        return self.__xk + 1j*self.__yk
 
     def clone(self):
         return Splinep(self.__xk, self.__yk)
@@ -73,18 +87,6 @@ class Splinep(ClosedCurve):
         fh.write('  defined with %d spline knots,\n' % len(self.__xk))
         fh.write('  total chordal arc length %s\n\n' % self.arclength())
         return fh.getvalue()
-
-    @property
-    def xpts(self):
-        return list(self.__xk)
-
-    @property
-    def ypts(self):
-        return list(self.__yk)
-
-    @property
-    def zpts(self):
-        return self.__xk + 1j*self.__yk
 
     def __add__(self, scalar):
         xs = [ x + scalar.real for x in self.__xk ]
