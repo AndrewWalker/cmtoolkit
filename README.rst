@@ -22,6 +22,11 @@ The latest version of this package can be installed from github
 
     $ pip install git+git://github.com/AndrewWalker/cmtoolkit
 
+Examples
+========
+
+- `Mobius transformation notebook <http://nbviewer.ipython.org/github/AndrewWalker/cmtoolkit/blob/master/notebooks/mobius_grids.ipynb>`_
+
 License
 =======
 
