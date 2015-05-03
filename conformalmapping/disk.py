@@ -67,7 +67,7 @@ class Disk(Region):
 
         ppul = 200
         idx = 1
-        for j in xrange(1, levels+1):
+        for j in range(1, levels+1):
             pass
 
     def polarGrid(self):
@@ -80,12 +80,12 @@ class Disk(Region):
 
         curves = []
         zg = np.arange(1, npt+1) / float(npt+1)
-        for k in xrange(nrad):
+        for k in range(nrad):
             crv = c + r * np.exp(2j * np.pi * k/float(nrad)) * zg
             curves.append(crv)
 
         zg = np.exp(2j * np.pi * np.arange(npt)/float(npt-1))
-        for k in xrange(1, ncirc+1):
+        for k in range(1, ncirc+1):
             crv = c + r*k/float(ncirc+1)*zg
             curves.append(crv)
 

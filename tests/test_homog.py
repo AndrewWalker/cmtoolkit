@@ -8,4 +8,4 @@ class TestHomog(unittest.TestCase):
     def test_homog(self):
         h = Homog(-1.2-0.4j, 1.2+0.4j)
         h = h.__complex__()
-        self.assertAlmostEquals(h, -1.0)
+        self.assertAlmostEqual(h, -1.0)

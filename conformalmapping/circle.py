@@ -3,9 +3,9 @@ from .closedcurve import ClosedCurve
 from .mobiusbase import MobiusBase, standardmap
 from .zline import Zline
 try:
-    from io import StringIO
-except:
     from StringIO import StringIO
+except:
+    from io import StringIO
 
 class Circle(ClosedCurve):
     """Circle is a generalized circle class.
@@ -14,6 +14,10 @@ class Circle(ClosedCurve):
     def __init__(self, center = np.nan , radius = np.inf, line = None):
         """Creates a circle with given center and radius.
         """
+        if type(center) == np.ndarray:
+            center = center[0]
+        if type(radius) == np.ndarray:
+            radius = radius[0]
         if radius < 0.0:
             raise ValueError('Circle must have a postive radius') 
         self._center = center

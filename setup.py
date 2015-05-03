@@ -13,7 +13,7 @@ if sys.version_info >= (3,):
     extras['test_suite'] = 'tests'
 else:
     extras['tests_require'] = ['unittest2']
-    extras['test_suite'] = 'unittest2.testcollector'
+    extras['test_suite'] = 'unittest2.collector'
 
 setup(
     name         = 'conformalmapping',

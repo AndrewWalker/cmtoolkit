@@ -35,5 +35,5 @@ class TestMobius(unittest.TestCase):
     def test_map_range(self):
         r = self.cm.range
         c = self.cm(r.outer)
-        self.assertAlmostEquals(c.center, -0.3333 - 0.0j, 4)
-        self.assertAlmostEquals(c.radius, 0.33333, 4)
+        self.assertAlmostEqual(c.center, -0.3333 - 0.0j, 4)
+        self.assertAlmostEqual(c.radius, 0.33333, 4)
