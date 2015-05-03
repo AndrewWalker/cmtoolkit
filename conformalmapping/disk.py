@@ -49,26 +49,8 @@ class Disk(Region):
     def grid(self, **kwargs):
         if self.gridType == 'polar':
             return self.polarGrid(**kwargs)
-        elif self.gridType  == 'carleson':
-            return self.carlesonGrid(**kwargs)
         else:
             raise NotImplementedError('Unknown grid type')
-
-    def carlesonGrid(self, levels=5):
-        """Generate a basic Carleson grid
-        """
-        nu = 32
-        r  = 0.6
-
-        #gc = ?
-
-        ncp = 200
-        # gc = 
-
-        ppul = 200
-        idx = 1
-        for j in range(1, levels+1):
-            pass
 
     def polarGrid(self):
         nrad  = self.numRadialLines

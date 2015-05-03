@@ -82,10 +82,7 @@ class Region(object):
         return (self._innerboundaries != []) and (self._outerboundaries != [])
 
     def boundbox(self):
-        #zi = np.zeros( 4 * self.numinner() )
-        #for i in xrange(self.numinner()):
-            #zi[np.arange(4*k, 4*k+4)] = 
-        return None
+        raise NotImplementedError('Region.boundbox not implemented')
 
     def connectivity(self):
         return self.numinner + self.numouter
