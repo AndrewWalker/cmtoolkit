@@ -1,4 +1,6 @@
+import numpy as np
 from .closedcurve import ClosedCurve
+from . import cmt
 
 class Region(object):
     """
@@ -82,7 +84,14 @@ class Region(object):
         return (self._innerboundaries != []) and (self._outerboundaries != [])
 
     def boundbox(self):
-        raise NotImplementedError('Region.boundbox not implemented')
+        # The bounding box of a region is the bounding-box which encloses
+        # all of the boundaries (inner and outer) that make up the region.
+        zi = []
+        for b in self.boundaries:
+            zi.append( cmt.bb2z( b.boundbox() ) )
+        zi = np.vstack(zi)
+        zi = np.max(zi, axis=0)
+        return zi
 
     def connectivity(self):
         return self.numinner + self.numouter

@@ -1,4 +1,6 @@
+import matplotlib.pyplot as plt
 from .gridcurves import GridCurves
+from .cmt import plotbox
 
 class ConformalMap(object):
     def __init__(self, domain = None, range = None, *args):
@@ -29,6 +31,7 @@ class ConformalMap(object):
         return '**conformalmap object**\n\n'
 
     def plot(self, *args, **kwargs):
-        self(self.domain).plot()
-
-
+        self(self.domain.grid()).plot()
+        self.range.plot()
+        plt.gca().set_aspect('equal')
+        plt.gca().axis(plotbox(self.range.boundbox()))

@@ -30,4 +30,9 @@ def plotbox(points, scale = 1.2):
 
     return np.hstack([midx + dbox, midy + dbox])
 
-
+def bb2z(box):
+    """Axis bounding box to vertices
+    """
+    z = [ np.complex(box[i], box[j]) for i, j in zip([0,1,1,0], [2,2,3,3]) ]
+    z = np.array(z)
+    return z
