@@ -9,7 +9,7 @@ def read(filename):
 
 # Python version specific setup
 extras = {}
-if sys.version_info[0] >= (3,):
+if sys.version_info >= (3,):
     extras['test_suite'] = 'tests'
 else:
     extras['tests_require'] = ['unittest2']
