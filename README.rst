@@ -16,7 +16,13 @@ Toby Driscoll.
 Installation
 ============
 
-The latest version of this package can be installed from github
+You can install the latest stable version from PyPI
+
+.. code-block:: console
+
+    $ pip install cmtoolkit
+
+The latest development version of this package can be installed from github
 
 .. code-block:: console
 
