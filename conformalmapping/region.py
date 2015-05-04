@@ -100,7 +100,7 @@ class Region(object):
         if self.isempty():
             return 'empty region'
         else:
-            raise NotImplemented('todo')
+            return 'non-empty Region'
 
     def grid(self):
         return self.grid

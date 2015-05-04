@@ -5,7 +5,7 @@ class Curve(object):
     """Base class for simple planar Jordan curves
     """
 
-    def __init__(self, positionfun = None, tangentfunc = None, bounds = None ):
+    def __init__(self, positionfun = None, tangentfun = None, bounds = None ):
         """Create a curve
 
         Parameters
@@ -83,7 +83,7 @@ class Curve(object):
         ts = np.asarray(ts, dtype = np.float)
         return self._positionfun(ts)
 
-    def tangent(self, t):
+    def tangent(self, ts):
         ts = np.asarray(ts, dtype = np.float)
         return self._tangentfun(ts)
 
