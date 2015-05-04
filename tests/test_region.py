@@ -4,7 +4,18 @@ from conformalmapping import *
 class TestRegion(unittest.TestCase):
 
     def setUp(self):
+        self.regions = [
+            Disk(Circle(0.0, 1.0))
+        ]
         self.p = Circle(0.0, 1.0)
+
+    def test_str_present(self):
+        for r in self.regions:
+            str(r)
+
+    def test_repr_present(self):
+        for r in self.regions:
+            repr(r)
 
     def test_empty_constructors(self):
         r = Region()
