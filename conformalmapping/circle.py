@@ -9,11 +9,26 @@ except:
 
 class Circle(ClosedCurve):
     """Circle is a generalized circle class.
+
+    Circle is generalized in that it can represent either a circle,
+    or a circle with infinite radius (a line). This representation 
+    is necessary to make the math come out nicely.
     """
     
     def __init__(self, center = np.nan , radius = np.inf, line = None):
         """Creates a circle with given center and radius.
+
+        Parameters
+        ----------
+        circle : complex
+            the location of the circle in the complex plane
+
+        radius : real
+            the radius of the circle
         """
+        # TODO - the type checking here is because of minor python 2/3
+        #        compatibility issue. Remove these checks when that issue
+        #        is resolved
         if type(center) == np.ndarray:
             center = center[0]
         if type(radius) == np.ndarray:
@@ -33,7 +48,15 @@ class Circle(ClosedCurve):
 
     @staticmethod
     def from_vector(z3):
+        """Create a generalized circle passing through three points
+
+        Parameters
+        ----------
+        z3 : array-like
+            a three element array of complex
+        """
         z3 = np.asarray(z3).astype(np.complex)
+        # TODO - check that the array has exactly three elements
         M_a = standardmap(z3)
         M_b = standardmap([1.0, 1.0j, -1.0])
         M = MobiusBase(np.linalg.solve(M_a, M_b))
@@ -91,17 +114,26 @@ class Circle(ClosedCurve):
             return d
         else:
             v = z - self.line.position(0)
-            #s = np.sign(1j *
             return None
 
     def fill(self):
         pass
 
     def isinf(self):
+        """True if the circle is really a line
+        """
         return np.isinf(self.radius)
     
     def isinside(self, z):
         """True if the point is inside the circle
+
+        In the case where the circle has infinite radius, isinside
+        is still a valid operation, and will return true for a halfplane
+
+        Parameters
+        ----------
+        z : complex
+            the point to check if it is inside
         """
         if self.isinf():
             z0 = self.line.position(0)
