@@ -12,10 +12,10 @@ class TestHomog(unittest.TestCase):
 
     def test_str(self):
         h = Homog(1.0j, 1.0)
-        self.assertEqual(type(str(h)) == str)
+        self.assertEqual(type(str(h)), str)
 
     def test_repr(self):
         h = Homog(1.0j, 1.0)
-        self.assertEqual(type(repr(h)) == str)
+        self.assertEqual(type(repr(h)), str)
 
 
