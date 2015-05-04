@@ -2,4 +2,4 @@
 source=conformalmapping
 
 [report]
-include=conformalmapping
+include=conformalmapping*
