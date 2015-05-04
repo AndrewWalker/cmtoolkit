@@ -11,7 +11,10 @@ This package is an unofficial port of the (MATLAB) `Conformal Mapping Toolkit
 (CMToolkit) <https://github.com/tobydriscoll/conformalmapping>`_, written by
 Toby Driscoll.
 
-|build_status|
+|build_status| |coverage|
+
+
+
 
 Installation
 ============
@@ -46,3 +49,7 @@ Users of this software must comply with the `license <LICENSE>`_ for this packag
 .. |build_status| image:: https://api.travis-ci.org/AndrewWalker/cmtoolkit.png
    :target: https://travis-ci.org/AndrewWalker/cmtoolkit
    :alt: Current build status
+
+.. |coverage| image:: https://coveralls.io/repos/AndrewWalker/cmtoolkit/badge.png?branch=master
+  :target: https://coveralls.io/r/AndrewWalker/cmtoolkit?branch=master
+  :alt: Current test coverage
