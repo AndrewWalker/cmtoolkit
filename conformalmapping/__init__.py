@@ -2,6 +2,7 @@
 # Utilities
 from .homog import Homog
 from .gridcurves import GridCurves
+from .szego import Szego, SzegoKernel, SzegoOpts
 
 # Closed Curves
 from .closedcurve import ClosedCurve
