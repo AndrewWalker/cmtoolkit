@@ -117,8 +117,10 @@ class Szego(object):
         A = np.vstack(A)
         return A
 
-    def phi(self):
-        pass
+    def phi(self, ts):
+        ts = np.asarray(ts).reshape(1, -1)[0, :]
+        v = self.psi(ts) - np.dot(self.kerz_stein(ts), self.phiColl) * self .dtColl
+        return v
 
     def psi(self, ts):
         ts = np.asarray(ts).reshape(1, -1)[0, :]

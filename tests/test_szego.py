@@ -56,8 +56,16 @@ class TestSzegoKernel(unittest.TestCase):
         self.assert_(type(out), np.ndarray)
         self.assert_(out.shape, (1,))
 
+    def test_phi(self):
+        szego = Szego(self.G, 0.0)
+        out = szego.phi([0.0])
+        assert_allclose(0.7549 + 0.4148j, out, 2)
+
     def test_kerz_stein(self):
         szego = Szego(self.G, 0.0)
+
+        # the zero here represents the value that is
+        # required for calculating phi
         out = szego.kerz_stein([0.0])
 
         idx = [ 0, 1, 3, 7, 15, 31, 63, 127 ]
