@@ -4,7 +4,7 @@ from numpy.testing import *
 from conformalmapping import *
 
 class TestMobius(unittest.TestCase):
-    def test_easy(self):
+    def test_from_matrix(self):
         Mobius.from_matrix_elements(1,1,1,1)
 
     def test_call_operator(self):
@@ -14,7 +14,7 @@ class TestMobius(unittest.TestCase):
         for v in lst:
             self.assertAlmostEqual(v, cm(v))
 
-class TestMobius(unittest.TestCase):
+class TestMobiusCombined(unittest.TestCase):
     def setUp(self):
         z3 = [1, 1j, -1]
         w3 = [-1, -2j, 0]

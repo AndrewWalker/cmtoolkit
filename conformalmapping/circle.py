@@ -38,7 +38,16 @@ class Circle(ClosedCurve):
         self._center = center
         self._radius = radius
         self._line   = line
-        super(Circle, self).__init__()
+
+        def position(ts):
+            return center + radius * np.exp(1.0j * ts)
+
+        def tangent(ts):
+            return 1.0j * np.exp(1.0j * ts)
+
+        super(Circle, self).__init__(positionfun = position,
+                                     tangentfun = tangent,
+                                     bounds = [0.0, 2.0 * np.pi])
 
     @staticmethod
     def from_points(z1, z2, z3):

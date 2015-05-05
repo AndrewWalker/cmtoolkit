@@ -1,5 +1,5 @@
 import numpy as np
-from .cmt import boundbox
+from . import cmt 
 
 class Curve(object):
     """Base class for simple planar Jordan curves
@@ -31,6 +31,11 @@ class Curve(object):
         self._positionfun = positionfun
         self._tangentfun = tangentfun
         self._bounds = bounds
+        assert bounds != None
+
+    @property
+    def bounds(self):
+        return self._bounds
 
     def boundbox(self):
         """Create a bounding box the encloses this curve
@@ -59,9 +64,6 @@ class Curve(object):
         ps = self.point(ts)
         out = cmt.plotbox(ps, scale)
 
-    def corner(self):
-        raise NotImplementedError('TODO')
-
     def __str__(self):
         return 'curve parameterized over [%s, %s]\n' % self.bounds
 
@@ -70,6 +72,7 @@ class Curve(object):
         return False
 
     def point(self, ts):
+        ts = np.asarray(ts, dtype=np.float).reshape(-1, 1)[:, 0]
         # a naive solution here is fine for the moment
         # anything better relies on building blocks that are not
         # available yet
@@ -86,4 +89,10 @@ class Curve(object):
     def tangent(self, ts):
         ts = np.asarray(ts, dtype = np.float)
         return self._tangentfun(ts)
+
+    def plot(self):
+        ts = np.linspace(0.0, 1.0, 200)
+        zs = self.point(ts)
+        # TODO - plot configuration
+        plt.plot(zs.real, zs.imag, 'k-')
 

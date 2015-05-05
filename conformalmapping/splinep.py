@@ -11,16 +11,35 @@ from .closedcurve import ClosedCurve
 
 class Splinep(ClosedCurve):
     def __init__(self, xk, yk):
-        super(Splinep, self).__init__()
         assert( len(xk) == len(yk) )
-        self.__xk = np.asarray(xk)
-        self.__yk = np.asarray(yk)
-        if abs(self.__xk[0] - self.__xk[-1]) > np.spacing(1):
-            self.__xk = np.hstack([self.__xk, self.__xk[0]])
-            self.__yk = np.hstack([self.__yk, self.__yk[0]])
-        pp, arclen =  makeSpline(xk, yk)
-        self.ppArray = pp
-        self.chordalArcLength = arclen
+        self._xk = np.asarray(xk)
+        self._yk = np.asarray(yk)
+        if abs(self._xk[0] - self._xk[-1]) > np.spacing(1):
+            self._xk = np.hstack([self._xk, self._xk[0]])
+            self._yk = np.hstack([self._yk, self._yk[0]])
+
+        ppArray, chordalArcLength =  makeSpline(xk, yk)
+
+        def position(t):
+            t = np.asarray(t).reshape(-1) 
+            t = chordalArcLength * t
+            zre = self.ppArray[(0,0)](t)
+            zim = self.ppArray[(1,0)](t)
+            return zre + 1j * zim
+
+        def tangent(t):
+            t = np.asarray(t).reshape(-1) 
+            t = chordalArcLength * t
+            zre = self.ppArray[(0,1)](t)
+            zim = self.ppArray[(1,1)](t)
+            return chordalArcLength * (zre + 1j * zim)
+
+        super(Splinep, self).__init__(positionfun = position,
+                                      tangentfun = tangent,
+                                      bounds = [0.0, 1.0])
+
+        self.ppArray = ppArray
+        self.chordalArcLength = chordalArcLength
 
     @classmethod
     def from_complex_list(cls, lst):
@@ -36,18 +55,18 @@ class Splinep(ClosedCurve):
 
     @property
     def xpts(self):
-        return list(self.__xk)
+        return list(self._xk)
 
     @property
     def ypts(self):
-        return list(self.__yk)
+        return list(self._yk)
 
     @property
     def zpts(self):
-        return self.__xk + 1j*self.__yk
+        return self._xk + 1j*self._yk
 
     def clone(self):
-        return Splinep(self.__xk, self.__yk)
+        return Splinep(self._xk, self._yk)
 
     def apply(self, op):
         raise NotImplemented('todo')
@@ -58,13 +77,6 @@ class Splinep(ClosedCurve):
     def __call__(self, t):
         return self.point(t)
 
-    def point(self, t):
-        t = np.asarray(t).reshape(-1) # force t to be a vector
-        t = self.modparam(t) * self.arclength()
-        zre = self.ppArray[(0,0)](t)
-        zim = self.ppArray[(1,0)](t)
-        return zre + 1j * zim
-
     def second(self, t):
         t = np.asarray(t).reshape(-1) 
         t = self.modparam(t) * self.arclength()
@@ -73,24 +85,16 @@ class Splinep(ClosedCurve):
         zs = zre + 1j * zim
         return self.arclength()**2 * zs
 
-    def tangent(self, t):
-        t = np.asarray(t).reshape(-1) 
-        t = self.modparam(t) * self.arclength()
-        zre = self.ppArray[(0,1)](t)
-        zim = self.ppArray[(1,1)](t)
-        zs = zre + 1j * zim
-        return self.arclength() * zs
-
     def __str__(self):
         fh = StringIO()
         fh.write('splinep object:\n\n')
-        fh.write('  defined with %d spline knots,\n' % len(self.__xk))
+        fh.write('  defined with %d spline knots,\n' % len(self._xk))
         fh.write('  total chordal arc length %s\n\n' % self.arclength())
         return fh.getvalue()
 
     def __add__(self, scalar):
-        xs = [ x + scalar.real for x in self.__xk ]
-        ys = [ y + scalar.imag for y in self.__yk ]
+        xs = [ x + scalar.real for x in self._xk ]
+        ys = [ y + scalar.imag for y in self._yk ]
         return Splinep(xs, ys)
 
 class PiecewisePolynomial(object):
