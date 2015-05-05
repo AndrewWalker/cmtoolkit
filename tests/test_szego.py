@@ -60,6 +60,19 @@ class TestSzegoKernel(unittest.TestCase):
         szego = Szego(self.G, 0.0)
         out = szego.kerz_stein([0.0])
 
+        idx = [ 0, 1, 3, 7, 15, 31, 63, 127 ]
+        expected = np.array([
+           0.0000 + 0.0000j, 
+          -0.2240 - 0.0141j, 
+          -0.7638 - 0.1288j, 
+          -1.5829 - 0.4801j, 
+          -1.9103 - 0.7444j, 
+          -1.6548 - 0.3500j, 
+          -1.3082 + 0.5812j, 
+          -0.3146 + 0.7873j, 
+        ])
+        assert_allclose(out[0, idx], expected, 2)
+
 
 class TestSzegoKernelCreation(unittest.TestCase):
     def setUp(self):
@@ -103,5 +116,7 @@ class TestSzegoKernelCreation(unittest.TestCase):
            0.2239 - 0.0874j, 
         ]
         expected = np.array(expected)
-        assert_allclose(kernel.phiColl[phiIdx] , expected, 3
-)
+        assert_allclose(kernel.phiColl[phiIdx] , expected, 3)
+
+
+

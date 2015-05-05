@@ -75,7 +75,6 @@ class Szego(object):
         self.zTan = kernel.zTan
         self.zUnitTan = kernel.zUnitTan
 
-
     def kerz_stein(self, ts):
         t = np.asarray(ts).reshape(1, -1)[0, :]
         w = self.curve.position(t)
@@ -91,23 +90,32 @@ class Szego(object):
         def KS_by_idx(wi, zi):
             """Array with k elements
             """
-            #print z[zi].reshape(-1,1)
             z_w = z[zi] - w[wi]
+            assert( z_w.shape == (self.numCollPts,) )
             tmp1 = wt[wi]*zt[zi]
+            assert( not np.any(np.isnan(tmp1)) )
+            assert( tmp1.shape == (self.numCollPts,) )
             tmp2 = np.abs(tmp1)
+            assert( not np.any(np.isnan(tmp2)) )
+            assert( tmp2.dtype == np.float )
             tmp3 = np.sqrt(tmp2)
+            assert( not np.any(np.isnan(tmp3)) )
             tmp4 = (2j * np.pi)
 
             tmp5 = np.conjugate(wT[wi]/z_w)
+            assert( not np.any(np.isnan(tmp5)) )
             tmp6 = zT[zi]/z_w
+            assert( not np.any(np.isnan(tmp6)) )
             tmp7 = tmp5 - tmp6
-
-            return tmp3 / tmp4 * tmp7
+            out = tmp3 / tmp4 * tmp7
+            out[np.abs(z_w) < separation] = 0.0
+            return out
 
         wis = np.arange(len(w))
         zis = np.arange(self.numCollPts)
-        A = [ KS_by_idx(wis, zi) for zi in zis ]
-
+        A = [ KS_by_idx(wi, zis) for wi in wis ]
+        A = np.vstack(A)
+        return A
 
     def phi(self):
         pass
