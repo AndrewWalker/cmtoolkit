@@ -64,6 +64,10 @@ class Szego(object):
         self.curve = curve
         self.confCenter = confCenter
 
+        if opts is None:
+            opts = SzegoOpts()
+        self.numCollPts = opts.numCollPts 
+
         kernel = SzegoKernel(curve, confCenter, SzegoOpts())
         self.phiColl = kernel.phiColl
         self.dtColl = kernel.dtColl
@@ -83,6 +87,26 @@ class Szego(object):
         zT = self.zUnitTan
         
         separation = 10 * np.spacing(np.max(np.abs(z)))
+
+        def KS_by_idx(wi, zi):
+            """Array with k elements
+            """
+            #print z[zi].reshape(-1,1)
+            z_w = z[zi] - w[wi]
+            tmp1 = wt[wi]*zt[zi]
+            tmp2 = np.abs(tmp1)
+            tmp3 = np.sqrt(tmp2)
+            tmp4 = (2j * np.pi)
+
+            tmp5 = np.conjugate(wT[wi]/z_w)
+            tmp6 = zT[zi]/z_w
+            tmp7 = tmp5 - tmp6
+
+            return tmp3 / tmp4 * tmp7
+
+        wis = np.arange(len(w))
+        zis = np.arange(self.numCollPts)
+        A = [ KS_by_idx(wis, zi) for zi in zis ]
 
 
     def phi(self):
