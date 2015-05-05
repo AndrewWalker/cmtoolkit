@@ -19,12 +19,6 @@ class Region(object):
         self._outerboundaries = self._checkcc(outer)
         self._innerboundaries = self._checkcc(inner)
 
-    @staticmethod
-    def simply_connected_region(boundary, **kwargs):
-        """Construct a region with no holes
-        """
-        return Region(outer = boundary, **kwargs)
-
     @property
     def outer(self):
         if len(self._outerboundaries) == 1:
