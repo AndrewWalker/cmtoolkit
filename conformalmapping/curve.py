@@ -63,6 +63,7 @@ class Curve(object):
         ts = np.linspace(tmin, tmax, 300)
         ps = self.point(ts)
         out = cmt.plotbox(ps, scale)
+        return out
 
     def __str__(self):
         return 'curve parameterized over [%s, %s]\n' % self.bounds
