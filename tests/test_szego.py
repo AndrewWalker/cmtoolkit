@@ -32,7 +32,7 @@ class TestSzegoKernel(unittest.TestCase):
         ]
         szego = Szego(self.G, 0.0)
         for name in names:
-            self.assert_(name in dir(szego))
+            self.assertTrue(name in dir(szego))
 
     def test_conformal_center(self):
         szego = Szego(self.G, 1.0)
@@ -42,25 +42,25 @@ class TestSzegoKernel(unittest.TestCase):
         self.assertAlmostEqual(szego.confCenter, 1.0j)
 
     def test_has_str(self):
-        self.assert_(str(Szego(self.G, 0.0)).startswith('Szego'))
+        self.assertTrue(str(Szego(self.G, 0.0)).startswith('Szego'))
 
     def test_psi(self):
         szego = Szego(self.G, 0.0)
         out = szego.psi(0.0)
-        self.assert_(type(out), np.ndarray)
-        self.assert_(out.shape, (1,))
+        self.assertTrue(type(out), np.ndarray)
+        self.assertTrue(out.shape, (1,))
 
     def test_psi_vectorized_one(self):
         szego = Szego(self.G, 0.0)
         out = szego.psi([0.0])
-        self.assert_(type(out), np.ndarray)
-        self.assert_(out.shape, (1,))
+        self.assertTrue(type(out), np.ndarray)
+        self.assertTrue(out.shape, (1,))
 
     def test_psi_vectorized_many(self):
         szego = Szego(self.G, 0.0)
         out = szego.psi([0.0, 0.1])
-        self.assert_(type(out), np.ndarray)
-        self.assert_(out.shape, (2,))
+        self.assertTrue(type(out), np.ndarray)
+        self.assertTrue(out.shape, (2,))
 
     def test_phi(self):
         szego = Szego(self.G, 0.0)
@@ -83,7 +83,7 @@ class TestSzegoKernel(unittest.TestCase):
 
     def test_theta0(self):
         szego = Szego(self.G, 0.0)
-        self.assertAlmostEqual(szego.theta0, 1.3943, 3)
+        assert_allclose(szego.theta0, 1.3943, 3)
 
     def test_saa(self):
         szego = Szego(self.G, 0.0)
@@ -140,14 +140,14 @@ class TestSzegoKernelCreation(unittest.TestCase):
         kernel = SzegoKernel(self.G, 0, self.opts)
 
         # The correctness of these is implied by the spline tests
-        self.assert_(type(kernel.zPts), np.ndarray)
-        self.assert_(kernel.zPts.shape, (self.opts.numCollPts,))
-        self.assert_(type(kernel.zTan), np.ndarray)
-        self.assert_(kernel.zTan.shape, (self.opts.numCollPts,))
+        self.assertTrue(type(kernel.zPts), np.ndarray)
+        self.assertTrue(kernel.zPts.shape, (self.opts.numCollPts,))
+        self.assertTrue(type(kernel.zTan), np.ndarray)
+        self.assertTrue(kernel.zTan.shape, (self.opts.numCollPts,))
 
         # The correctness of these is implied by the specific example below
-        self.assert_(type(kernel.zUnitTan), np.ndarray)
-        self.assert_(kernel.zUnitTan.shape, (self.opts.numCollPts,))
+        self.assertTrue(type(kernel.zUnitTan), np.ndarray)
+        self.assertTrue(kernel.zUnitTan.shape, (self.opts.numCollPts,))
 
     def test_specific_example(self):
         kernel = SzegoKernel(self.G, 0, self.opts)

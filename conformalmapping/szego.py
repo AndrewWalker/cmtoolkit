@@ -149,8 +149,15 @@ class Szego(object):
         th[ts == 0] = 0
         return th
 
-    def invtheta(self):
-        pass
+    def invtheta(self, s, tol):
+        assert(np.all(np.diff(s)) > 0)
+        assert(np.all(s != 2*np.pi))
+
+        f = lambda t : self.mod(self.theta(t), 2*np.pi)
+        t = s / (2 * np.pi)
+        btol = 1e-3
+        bmaxiter = 20
+
 
     def thetap(self):
         ts = np.asarray(ts).reshape(1, -1)[0, :]
