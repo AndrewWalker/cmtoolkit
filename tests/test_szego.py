@@ -61,6 +61,10 @@ class TestSzegoKernel(unittest.TestCase):
         out = szego.phi([0.0])
         assert_allclose(0.7549 + 0.4148j, out, 2)
 
+    def test_theta0(self):
+        szego = Szego(self.G, 0.0)
+        self.assertAlmostEqual(szego.theta0, 1.3943, 3)
+
     def test_kerz_stein(self):
         szego = Szego(self.G, 0.0)
 

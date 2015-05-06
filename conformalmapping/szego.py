@@ -67,6 +67,7 @@ class Szego(object):
 
         if opts is None:
             opts = SzegoOpts()
+
         self.numCollPts = opts.numCollPts 
 
         kernel = SzegoKernel(curve, confCenter, SzegoOpts())
@@ -75,6 +76,8 @@ class Szego(object):
         self.zPts = kernel.zPts
         self.zTan = kernel.zTan
         self.zUnitTan = kernel.zUnitTan
+
+        self.theta0 = np.angle(-1.0j * self.phi(0.0)**2 * self.curve.tangent(0))
 
     @suppress_warnings
     def kerz_stein(self, ts):
