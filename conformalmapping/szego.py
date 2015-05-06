@@ -1,6 +1,7 @@
 import numpy as np
 from numpy.linalg import norm
 from .closedcurve import *
+from .helpers import *
 
 class SzegoKernel(object):
     def __init__(self, curve, a, opts):
@@ -75,6 +76,7 @@ class Szego(object):
         self.zTan = kernel.zTan
         self.zUnitTan = kernel.zUnitTan
 
+    @suppress_warnings
     def kerz_stein(self, ts):
         t = np.asarray(ts).reshape(1, -1)[0, :]
         w = self.curve.position(t)
