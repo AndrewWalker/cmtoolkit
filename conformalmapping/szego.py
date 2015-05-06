@@ -133,13 +133,19 @@ class Szego(object):
     def psi(self, ts):
         ts = np.asarray(ts).reshape(1, -1)[0, :]
         wt = self.curve.tangent(ts)
+        assert(wt.shape == ts.shape)
         xs = self.curve.point(ts) - self.confCenter
-        y = 1.0j / (2*np.pi) / np.sqrt(np.abs(wt)) * np.conjugate(wt / xs)
+        assert(xs.shape == ts.shape)
+        tmp1 = np.sqrt(np.abs(wt))
+        y = 1.0j / (2*np.pi) / tmp1 * np.conjugate(wt / xs)
         return y
 
     def theta(self, ts):
         ts = np.asarray(ts).reshape(1, -1)[0, :]
-        th = np.angle(-1.0j * self.phi(ts)**2 * self.curve.tangent(0)) - self.theta0
+        ph = self.phi(ts)**2 
+        assert(ts.shape == ph.shape), ph.shape
+        th = np.angle(-1.0j * ph * self.curve.tangent(ts)) 
+        th = th - self.theta0
         th[ts == 0] = 0
         return th
 
@@ -148,7 +154,7 @@ class Szego(object):
 
     def thetap(self):
         ts = np.asarray(ts).reshape(1, -1)[0, :]
-        thp = 2 * np.pi / self.Saaa * np.abs(self.phi(ts)**2)
+        thp = 2 * np.pi / self.Saa * np.abs(self.phi(ts)**2)
         return thp
 
     def __str__(self):

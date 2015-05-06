@@ -76,7 +76,7 @@ class Curve(object):
         # a naive solution here is fine for the moment
         # anything better relies on building blocks that are not
         # available yet
-        return np.array([ self.position(t) for t in np.asarray(ts) ])
+        return self.position(ts)
 
     def xypoint(self, t):
         z = self.point(t)

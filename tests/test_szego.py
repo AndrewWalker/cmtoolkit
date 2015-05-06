@@ -50,16 +50,36 @@ class TestSzegoKernel(unittest.TestCase):
         self.assert_(type(out), np.ndarray)
         self.assert_(out.shape, (1,))
 
-    def test_psi_vectorized(self):
+    def test_psi_vectorized_one(self):
         szego = Szego(self.G, 0.0)
         out = szego.psi([0.0])
         self.assert_(type(out), np.ndarray)
         self.assert_(out.shape, (1,))
 
+    def test_psi_vectorized_many(self):
+        szego = Szego(self.G, 0.0)
+        out = szego.psi([0.0, 0.1])
+        self.assert_(type(out), np.ndarray)
+        self.assert_(out.shape, (2,))
+
     def test_phi(self):
         szego = Szego(self.G, 0.0)
         out = szego.phi([0.0])
+        self.assertEqual(out.shape, (1,))
         assert_allclose(0.7549 + 0.4148j, out, 2)
+
+    def test_phi_vectorised_one(self):
+        szego = Szego(self.G, 0.0)
+        out = szego.phi([0.0])
+        self.assertEqual(out.shape, (1,))
+        assert_allclose(0.7549 + 0.4148j, out, 2)
+
+    def test_phi_vectorised_many(self):
+        szego = Szego(self.G, 0.0)
+        out = szego.phi([0.0, 0.1])
+        self.assertEqual(out.shape, (2,))
+        self.assertAlmostEqual(0.7549 + 0.4148j, out[0], 2)
+        self.assertAlmostEqual(0.1227 + 0.0749j, out[1], 2)
 
     def test_theta0(self):
         szego = Szego(self.G, 0.0)
@@ -68,6 +88,19 @@ class TestSzegoKernel(unittest.TestCase):
     def test_saa(self):
         szego = Szego(self.G, 0.0)
         self.assertAlmostEqual(szego.Saa, 0.2032, 3)
+
+    def test_theta(self):
+        szego = Szego(self.G, 0.0)
+        th = szego.theta([0.0, 0.1, 0.2, 0.4, 0.8])
+        expected = np.array([
+                 0,
+            0.4895,
+            0.5690,
+           -3.8710,
+           -1.7684,
+        ])
+        self.assertEqual(th.shape, (5, ))
+        assert_allclose(th, expected, 3)
 
     def test_kerz_stein(self):
         szego = Szego(self.G, 0.0)
