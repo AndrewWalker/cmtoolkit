@@ -14,7 +14,7 @@ class SzegoKernel(object):
         zT = zt / np.abs(zt)
 
         IpA = np.ones((N, N), dtype=np.complex)
-        for i in xrange(1, N):
+        for i in range(1, N):
             cols = np.arange(i)
             zc_zj = z[cols] - z[i]
 
