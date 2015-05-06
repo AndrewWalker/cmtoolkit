@@ -78,6 +78,9 @@ class Szego(object):
         self.zUnitTan = kernel.zUnitTan
 
         self.theta0 = np.angle(-1.0j * self.phi(0.0)**2 * self.curve.tangent(0))
+        self.Saa = np.sum(np.abs(self.phiColl**2))*self.dtColl
+        self.newtTol = opts.newtonTol
+        self.beNoisy = opts.trace
 
     @suppress_warnings
     def kerz_stein(self, ts):
@@ -134,14 +137,19 @@ class Szego(object):
         y = 1.0j / (2*np.pi) / np.sqrt(np.abs(wt)) * np.conjugate(wt / xs)
         return y
 
-    def theta(self):
-        pass
+    def theta(self, ts):
+        ts = np.asarray(ts).reshape(1, -1)[0, :]
+        th = np.angle(-1.0j * self.phi(ts)**2 * self.curve.tangent(0)) - self.theta0
+        th[ts == 0] = 0
+        return th
 
     def invtheta(self):
         pass
 
     def thetap(self):
-        pass
+        ts = np.asarray(ts).reshape(1, -1)[0, :]
+        thp = 2 * np.pi / self.Saaa * np.abs(self.phi(ts)**2)
+        return thp
 
     def __str__(self):
         return 'Szego kernel object:\n\n'

@@ -65,6 +65,10 @@ class TestSzegoKernel(unittest.TestCase):
         szego = Szego(self.G, 0.0)
         self.assertAlmostEqual(szego.theta0, 1.3943, 3)
 
+    def test_saa(self):
+        szego = Szego(self.G, 0.0)
+        self.assertAlmostEqual(szego.Saa, 0.2032, 3)
+
     def test_kerz_stein(self):
         szego = Szego(self.G, 0.0)
 
