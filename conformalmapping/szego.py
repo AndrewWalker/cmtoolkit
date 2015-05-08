@@ -149,15 +149,35 @@ class Szego(object):
         th[ts == 0] = 0
         return th
 
-    def invtheta(self, s, tol):
+    def invtheta(self, s, tol = None):
         assert(np.all(np.diff(s)) > 0)
         assert(np.all(s != 2*np.pi))
+        ntol = tol 
+        if tol is None:
+            ntol = self.newtTol
 
         f = lambda t : self.mod(self.theta(t), 2*np.pi)
         t = s / (2 * np.pi)
+        assert(t.shape == s.shape)
+
         btol = 1e-3
         bmaxiter = 20
 
+        nb = np.max([np.ceil(1.0/(2**4 * btol)), np.size(t)])
+        if nb > np.size(t):
+            tt = np.arange(nb) / nb
+        else:
+            tt = t
+
+        th = np.mod(self.theta(tt), 2 * np.pi)
+        tmp = np.diff(np.sign(s - th.reshape(-1, 1)), axis=0)
+        chg, colk = np.where(tmp == -2)
+        left = np.zeros(t.shape)
+        left[colk] = tt[chg]
+        right = np.zeros(t.shape)
+        right[colk] = tt[chg+1]
+
+        import ipdb; ipdb.set_trace()
 
     def thetap(self):
         ts = np.asarray(ts).reshape(1, -1)[0, :]

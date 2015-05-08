@@ -102,6 +102,11 @@ class TestSzegoKernel(unittest.TestCase):
         self.assertEqual(th.shape, (5, ))
         assert_allclose(th, expected, 3)
 
+    def test_invtheta(self):
+        szego = Szego(self.G, 0.0)
+        ts = 2 * np.pi * np.arange(20) / 20.
+        szego.invtheta(ts)
+
     def test_kerz_stein(self):
         szego = Szego(self.G, 0.0)
 
