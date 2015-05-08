@@ -102,6 +102,17 @@ class TestSzegoKernel(unittest.TestCase):
         self.assertEqual(th.shape, (5, ))
         assert_allclose(th, expected, 3)
 
+    def test_thetap(self):
+        szego = Szego(self.G, 0.0)
+        ts = np.arange(20) / 20.
+        ts = ts
+        thp = szego.thetap(ts)
+        
+        self.assertEqual(thp.shape, ts.shape)
+        self.assertAlmostEqual(thp[0], 22.9364, 3)
+        self.assertAlmostEqual(thp[1], 1.9622, 3)
+        self.assertAlmostEqual(thp[4], 0.9287, 3)
+
     def test_invtheta(self):
         szego = Szego(self.G, 0.0)
         ts = 2 * np.pi * np.arange(20) / 20.

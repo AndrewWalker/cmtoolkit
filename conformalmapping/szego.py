@@ -149,6 +149,9 @@ class Szego(object):
         th[ts == 0] = 0
         return th
 
+    def _log(self, msg):
+        print msg
+
     def invtheta(self, s, tol = None):
         assert(np.all(np.diff(s)) > 0)
         assert(np.all(s != 2*np.pi))
@@ -156,7 +159,7 @@ class Szego(object):
         if tol is None:
             ntol = self.newtTol
 
-        f = lambda t : self.mod(self.theta(t), 2*np.pi)
+        f = lambda t, s : s - np.mod(self.theta(t), 2*np.pi)
         t = s / (2 * np.pi)
         assert(t.shape == s.shape)
 
@@ -174,12 +177,56 @@ class Szego(object):
         chg, colk = np.where(tmp == -2)
         left = np.zeros(t.shape)
         left[colk] = tt[chg]
-        right = np.zeros(t.shape)
+        right = np.ones(t.shape)
         right[colk] = tt[chg+1]
 
-        import ipdb; ipdb.set_trace()
+        done = np.abs(f(t, s)) < btol
+        biter = 0
 
-    def thetap(self):
+        self._log('Starting bisection ...')
+        while not np.all(done) and biter < bmaxiter:
+            biter = biter + 1
+            t[~done] = 0.5 * (left[~done] + right[~done])
+            fk = f(t[~done], s[~done])
+            isneg = fk < 0
+            left[~done] = isneg * left[~done] + ~isneg * t[~done]
+            right[~done] = isneg * t[~done] + ~isneg * right[~done]
+            done[~done] = np.abs(fk) < btol
+        self._log('Bisection finished in %d steps' % biter)
+
+        nmaxiter = 20
+
+        fval = f(t, s)
+        done = np.abs(fval) < ntol
+        update = (~done).astype(np.float)
+        prev_update = np.nan * np.ones(update.shape)
+
+        niter = 0
+        self._log('Starting Newton iteration ...\n')
+        while not np.all(done) and niter < nmaxiter:
+            niter = niter + 1
+
+            update[~done] = fval[~done] / self.thetap(t[~done])
+            t[~done] = t[~done] + update[~done]
+
+            tmp1 = np.abs(prev_update[~done]) - np.abs(update[~done])
+            import ipdb; ipdb.set_trace()
+            if np.all(np.abs(tmp1) <= 100*eps()):
+                break
+            prev_update = update
+
+            fval[~done] = f(t[~done], s[~done])
+            done[~done] = np.abs(fval[~done]) < ntol
+            update[done] = 0
+        import ipdb; ipdb.set_trace()
+        self._log('Newton iteration finished in %d steps...\n' % niter)
+        maxerr = np.max(np.abs(fval))
+
+        self._log('label: %d/%d points wit |f| > eps, max|f| = %.4f \n\n' % (np.sum(~done), np.size(t), np.max(np.abs(fval))))
+
+        return t
+
+    def thetap(self, ts):
         ts = np.asarray(ts).reshape(1, -1)[0, :]
         thp = 2 * np.pi / self.Saa * np.abs(self.phi(ts)**2)
         return thp

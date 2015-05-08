@@ -12,3 +12,10 @@ def suppress_warnings(f):
         finally:
             np.seterr(**oldsettings)
     return impl
+
+def eps(z = 1):
+    """Wrapper around spacing that works for complex numbers
+    """
+    zre = np.abs(np.real(z))
+    zim = np.abs(np.imag(z))
+    return np.spacing(np.max([zre, zim]))
