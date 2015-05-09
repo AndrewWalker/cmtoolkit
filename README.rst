@@ -35,6 +35,8 @@ Examples
 ========
 
 - `Mobius transformation notebook <http://nbviewer.ipython.org/github/AndrewWalker/cmtoolkit/blob/master/notebooks/mobius_grids.ipynb>`_
+- `Parametric splines in 2D <http://nbviewer.ipython.org/github/AndrewWalker/cmtoolkit/blob/master/notebooks/splinep.ipynb>`_
+- `Szego kernel (and related) <http://nbviewer.ipython.org/github/AndrewWalker/cmtoolkit/blob/master/notebooks/szego.ipynb>`_
 
 License
 =======
