@@ -152,6 +152,7 @@ class Szego(object):
     def _log(self, msg):
         print msg
 
+    @suppress_warnings
     def invtheta(self, s, tol = None):
         assert(np.all(np.diff(s)) > 0)
         assert(np.all(s != 2*np.pi))
@@ -193,14 +194,12 @@ class Szego(object):
             right[~done] = isneg * t[~done] + ~isneg * right[~done]
             done[~done] = np.abs(fk) < btol
         self._log('Bisection finished in %d steps' % biter)
-
         nmaxiter = 20
 
         fval = f(t, s)
         done = np.abs(fval) < ntol
         update = (~done).astype(np.float)
         prev_update = np.nan * np.ones(update.shape)
-
         niter = 0
         self._log('Starting Newton iteration ...\n')
         while not np.all(done) and niter < nmaxiter:
@@ -208,17 +207,14 @@ class Szego(object):
 
             update[~done] = fval[~done] / self.thetap(t[~done])
             t[~done] = t[~done] + update[~done]
-
             tmp1 = np.abs(prev_update[~done]) - np.abs(update[~done])
-            import ipdb; ipdb.set_trace()
             if np.all(np.abs(tmp1) <= 100*eps()):
                 break
-            prev_update = update
+            prev_update = update.copy()
 
             fval[~done] = f(t[~done], s[~done])
             done[~done] = np.abs(fval[~done]) < ntol
             update[done] = 0
-        import ipdb; ipdb.set_trace()
         self._log('Newton iteration finished in %d steps...\n' % niter)
         maxerr = np.max(np.abs(fval))
 
