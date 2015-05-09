@@ -46,7 +46,7 @@ Delaware in any way.
 Users of this software must comply with the `license <LICENSE>`_ for this package, and the
 `CMToolkit license <LICENSE.conformalmappingtoolbox>`_
 
-.. |build_status| image:: https://api.travis-ci.org/AndrewWalker/cmtoolkit.png
+.. |build_status| image:: https://api.travis-ci.org/AndrewWalker/cmtoolkit.png?branch=master
    :target: https://travis-ci.org/AndrewWalker/cmtoolkit
    :alt: Current build status
 
