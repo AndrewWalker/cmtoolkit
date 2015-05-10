@@ -13,6 +13,7 @@ from .splinep import Splinep
 # Maps
 from .conformalmap import ConformalMap
 from .mobius import Mobius
+from .szmap import SzMap
 
 # Regions
 from .region import Region
