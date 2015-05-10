@@ -2,10 +2,7 @@ import numpy as np
 from .closedcurve import ClosedCurve
 from .mobiusbase import MobiusBase, standardmap
 from .zline import Zline
-try:
-    from StringIO import StringIO
-except:
-    from io import StringIO
+from ._compat import *
 
 class Circle(ClosedCurve):
     """Circle is a generalized circle class.

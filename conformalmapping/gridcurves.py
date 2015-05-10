@@ -1,8 +1,5 @@
 import matplotlib.pyplot as plt
-try:
-    from StringIO import StringIO
-except:
-    from io import StringIO
+from ._compat import *
 
 class GridCurves(object):
 

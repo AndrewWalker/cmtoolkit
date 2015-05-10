@@ -1,13 +1,10 @@
-try:
-    from StringIO import StringIO
-except:
-    from io import StringIO
 import numpy as np
 import scipy.sparse
 import scipy.sparse.linalg
 import scipy.interpolate 
 from scipy.interpolate import PPoly
 from .closedcurve import ClosedCurve
+from ._compat import *
 
 class Splinep(ClosedCurve):
     def __init__(self, xk, yk):
