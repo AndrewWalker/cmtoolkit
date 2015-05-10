@@ -150,7 +150,7 @@ class Szego(object):
         return th
 
     def _log(self, msg):
-        print msg
+        print(msg)
 
     @suppress_warnings
     def invtheta(self, s, tol = None):

@@ -116,7 +116,6 @@ class TestSzegoKernel(unittest.TestCase):
         szego = Szego(self.G, 0.0)
         ts = 2 * np.pi * np.arange(20) / 20.
         out = szego.invtheta(ts)
-        print out
         self.assertAlmostEqual(out[0], 0.0)
         self.assertAlmostEqual(out[1], 0.0212, 3)
         self.assertAlmostEqual(out[2], 0.2460, 3)
