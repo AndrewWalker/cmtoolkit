@@ -218,7 +218,7 @@ class Szego(object):
         self._log('Newton iteration finished in %d steps...\n' % niter)
         maxerr = np.max(np.abs(fval))
 
-        self._log('label: %d/%d points wit |f| > eps, max|f| = %.4f \n\n' % (np.sum(~done), np.size(t), np.max(np.abs(fval))))
+        self._log('label: %d/%d points with |f| > eps, max|f| = %.4f \n\n' % (np.sum(~done), np.size(t), np.max(np.abs(fval))))
 
         return t
 
