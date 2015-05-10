@@ -1,5 +1,4 @@
 import unittest
-import collections
 from conformalmapping import *
 import numpy as np
 from numpy.testing import *
