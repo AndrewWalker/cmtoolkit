@@ -47,7 +47,6 @@ class Region(object):
         """
         return self._outerboundaries + self._innerboundaries
 
-
     @property
     def connectivity(self):
         return self.numinner + self.numouter
@@ -76,6 +75,25 @@ class Region(object):
 
     def isempty(self):
         return (self._innerboundaries != []) and (self._outerboundaries != [])
+
+    def hasinner(self):
+        return len(self._innerboundaries) > 0
+
+    def hasouter(self):
+        return len(self._outerboundaries) > 0
+
+    def isexterior(self):
+        return self.hasinner() and not self.hasouter()
+
+    def isinterior(self):
+        return self.hasouter() and not self.hasinner()
+
+    def issimplyconnected(self):
+        if self.isexterior() and self.numinner == 1:
+            return True
+        if self.isinterior() and self.numouter == 1:
+            return True
+        return False
 
     def boundbox(self):
         # The bounding box of a region is the bounding-box which encloses
