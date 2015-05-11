@@ -62,6 +62,18 @@ class Region(object):
         pass
 
     def _checkcc(self, suitor):
+        """Validate a given boundary
+
+        Parameters
+        ----------
+        suitor : None, [ClosedCurve] or ClosedCurve
+            inputs
+
+        Returns
+        -------
+        out : [ClosedCurve]
+            the actual boundaries in the internal representation
+        """
         if suitor is None:
             return []
         elif isinstance(suitor, ClosedCurve):

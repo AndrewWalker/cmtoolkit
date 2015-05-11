@@ -4,7 +4,7 @@ from .closedcurve import *
 from .helpers import *
 
 class SzegoKernel(object):
-    def __init__(self, curve, a, opts):
+    def __init__(self, curve, a, opts, **kwargs):
         N = opts.numCollPts
 
         dt = 1.0 / float(N)
