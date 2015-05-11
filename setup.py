@@ -2,6 +2,7 @@ import os
 import sys
 from setuptools import setup, find_packages
 
+
 def read(filename):
     path = os.path.join(os.path.dirname(__file__), filename)
     contents = open(path).read()
@@ -14,6 +15,7 @@ if sys.version_info >= (3,):
 else:
     extras['tests_require'] = ['unittest2']
     extras['test_suite'] = 'unittest2.collector'
+
 
 setup(
     name         = 'cmtoolkit',
