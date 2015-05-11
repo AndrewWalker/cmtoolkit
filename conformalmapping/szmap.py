@@ -1,15 +1,16 @@
 import numpy as np
 from .conformalmap import ConformalMap
-from .closedcurve import ClosedCurve 
+from .closedcurve import ClosedCurve
 from .unitdisk import unitdisk
 from .region import Region
 from .szego import Szego, SzegoOpts
+
 
 class SzMap(ConformalMap):
     """SzMap represents a Riemann map via the Szego kernel.
     """
 
-    def __init__(self, range = None, conformalCenter = 0, **kwargs):
+    def __init__(self, range=None, conformalCenter=0, **kwargs):
         """Create a new conformal map based on the Szego kernel
 
         Parameters
@@ -20,7 +21,6 @@ class SzMap(ConformalMap):
         conformalCenter : complex
             the conformal center (forward to the szego kernel)
         """
-        range_ = kwargs.get('range', None)
         if isinstance(range, ClosedCurve):
             range = Region(range)
         if not range.issimplyconnected():

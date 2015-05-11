@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from ._compat import *
 
+
 class GridCurves(object):
 
     def __init__(self, curves):

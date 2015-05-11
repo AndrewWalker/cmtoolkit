@@ -1,47 +1,48 @@
 import numpy as np
 import scipy.sparse
 import scipy.sparse.linalg
-import scipy.interpolate 
+import scipy.interpolate
 from scipy.interpolate import PPoly
 from .closedcurve import ClosedCurve
 from ._compat import *
 
+
 class Splinep(ClosedCurve):
     def __init__(self, xk, yk):
-        assert( len(xk) == len(yk) )
+        assert(len(xk) == len(yk))
         self._xk = np.asarray(xk)
         self._yk = np.asarray(yk)
         if abs(self._xk[0] - self._xk[-1]) > np.spacing(1):
             self._xk = np.hstack([self._xk, self._xk[0]])
             self._yk = np.hstack([self._yk, self._yk[0]])
 
-        ppArray, chordalArcLength =  makeSpline(xk, yk)
+        ppArray, chordalArcLength = makeSpline(xk, yk)
 
         def position(t):
-            t = np.asarray(t).reshape(-1) 
+            t = np.asarray(t).reshape(-1)
             t = chordalArcLength * t
-            zre = self.ppArray[(0,0)](t)
-            zim = self.ppArray[(1,0)](t)
+            zre = self.ppArray[(0, 0)](t)
+            zim = self.ppArray[(1, 0)](t)
             return zre + 1j * zim
 
         def tangent(t):
-            t = np.asarray(t).reshape(-1) 
+            t = np.asarray(t).reshape(-1)
             t = chordalArcLength * t
-            zre = self.ppArray[(0,1)](t)
-            zim = self.ppArray[(1,1)](t)
+            zre = self.ppArray[(0, 1)](t)
+            zim = self.ppArray[(1, 1)](t)
             return chordalArcLength * (zre + 1j * zim)
 
-        super(Splinep, self).__init__(positionfun = position,
-                                      tangentfun = tangent,
-                                      bounds = [0.0, 1.0])
+        super(Splinep, self).__init__(positionfun=position,
+                                      tangentfun=tangent,
+                                      bound =(0.0, 1.0))
 
         self.ppArray = ppArray
         self.chordalArcLength = chordalArcLength
 
     @classmethod
     def from_complex_list(cls, lst):
-        xk = [ item.real for item in lst ]
-        yk = [ item.imag for item in lst ]
+        xk = [item.real for item in lst]
+        yk = [item.imag for item in lst]
         xk = np.asarray(xk)
         yk = np.asarray(yk)
         return Splinep(xk, yk)
@@ -75,10 +76,10 @@ class Splinep(ClosedCurve):
         return self.point(t)
 
     def second(self, t):
-        t = np.asarray(t).reshape(-1) 
+        t = np.asarray(t).reshape(-1)
         t = self.modparam(t) * self.arclength()
-        zre = self.ppArray[(0,2)](t)
-        zim = self.ppArray[(1,2)](t)
+        zre = self.ppArray[(0, 2)](t)
+        zim = self.ppArray[(1, 2)](t)
         zs = zre + 1j * zim
         return self.arclength()**2 * zs
 
@@ -90,9 +91,10 @@ class Splinep(ClosedCurve):
         return fh.getvalue()
 
     def __add__(self, scalar):
-        xs = [ x + scalar.real for x in self._xk ]
-        ys = [ y + scalar.imag for y in self._yk ]
+        xs = [x + scalar.real for x in self._xk]
+        ys = [y + scalar.imag for y in self._yk]
         return Splinep(xs, ys)
+
 
 class PiecewisePolynomial(object):
     def __init__(self, breaks, coefs):
@@ -103,21 +105,23 @@ class PiecewisePolynomial(object):
     def __call__(self, t):
         return self.__f(t)
 
+
 def mkpp(breaks, coeffs):
     """Simplfied version of MATLABs mkpp function using scipy
     """
     return PiecewisePolynomial(breaks, coeffs[:, :])
 
+
 def makeSpline(x, y):
-    """This algorithm is from "PERIODIC CUBIC SPLINE INTERPOLATION USING    
+    """This algorithm is from "PERIODIC CUBIC SPLINE INTERPOLATION USING
     PARAMETRIC SPLINES" by W.D. Hoskins and P.R. King, Algorithm 73, The
     Computer Journal, 15, 3(1972) P282-283. Fits a parametric periodic
-    cubic spline through n1 points (x(i), y(i)) (i = 1, ... ,n1) with 
+    cubic spline through n1 points (x(i), y(i)) (i = 1, ... ,n1) with
     x(1) = x(n1) and y(1) = y(n1). This function returns the first three
     derivatives of x and y, the chordal distances h(i) of (x(i),y(i)) and
     (x(i + 1), y(i + 1)) (i = 1, ..., n1 - 1) with h(n1) = h(1) and the
     total distance.
-    
+
     Thomas K. DeLillo, Lianju Wang 07-05-99.
     modified a bit by E. Kropf, 2013, 2014.
     ported to Python by A. Walker, 2015
@@ -141,11 +145,7 @@ def makeSpline(x, y):
     a = q / (p + q)
     b = 1 - a
 
-    # This is a worse way to write this than the MATLAB version
-    # but, it's much harder to make a mistake porting the indexing,
-    # and it has the side effect that I can do a bit, then watch in
-    # the debugger. If I need to optimize it, I'll do it later
-    Amat= np.ones((n, 5))
+    Amat = np.ones((n, 5))
     Amat[0,   0] = b[-1]
     Amat[:-1, 1] = a[1:]
     Amat[:,   2] *= 2.0
@@ -153,26 +153,26 @@ def makeSpline(x, y):
     Amat[1:,  3] = b[:-1]
     Amat[-1,  4] = a[0]
 
-    data  = Amat.T
+    data = Amat.T
     diags = np.array([1-n, -1, 0, 1, n-1])
     c = scipy.sparse.spdiags(data, diags, n, n)
-    
+
     tmp1 = (a * dx / p)
     tmp2 = b * np.hstack([dx[1:], x[1] - x[-1]]) / q
     d1 = 3 * (tmp1 + tmp2)
     x1 = scipy.sparse.linalg.spsolve(c.tocsr(), d1)
-    x1 = np.hstack([ x1[-1], x1 ])
+    x1 = np.hstack([x1[-1], x1])
 
     tmp1 = (a * dy / p)
     tmp2 = b * np.hstack([dy[1:], y[1] - y[-1]]) / q
     d2 = 3 * (tmp1 + tmp2)
     y1 = scipy.sparse.linalg.spsolve(c.tocsr(), d2)
-    y1 = np.hstack([ y1[-1], y1 ])
+    y1 = np.hstack([y1[-1], y1])
 
     x2 = 2 * (x1[:n] + 2*x1[1:] - 3*dx/p)/p
     y2 = 2 * (y1[:n] + 2*y1[1:] - 3*dy/p)/p
-    x2 = np.hstack([ x2[-1], x2 ])
-    y2 = np.hstack([ y2[-1], y2 ])
+    x2 = np.hstack([x2[-1], x2])
+    y2 = np.hstack([y2[-1], y2])
 
     x3 = np.diff(x2)/p
     y3 = np.diff(y2)/p
@@ -183,16 +183,12 @@ def makeSpline(x, y):
 
     # Make pp for later evaluation.
     pp = dict()
-    pp[(0,0)] = mkpp(t, np.vstack([x3/6, x2/2, x1, x]).T)
-    pp[(0,1)] = mkpp(t, np.vstack([x3/2, x2, x1]).T )
-    pp[(0,2)] = mkpp(t, np.vstack([x3, x2]).T )
+    pp[(0, 0)] = mkpp(t, np.vstack([x3/6, x2/2, x1, x]).T)
+    pp[(0, 1)] = mkpp(t, np.vstack([x3/2, x2, x1]).T)
+    pp[(0, 2)] = mkpp(t, np.vstack([x3, x2]).T)
 
-    pp[(1,0)] = mkpp(t, np.vstack([y3/6, y2/2, y1, y]).T)
-    pp[(1,1)] = mkpp(t, np.vstack([y3/2, y2, y1]).T )
-    pp[(1,2)] = mkpp(t, np.vstack([y3, y2]).T )
-   
+    pp[(1, 0)] = mkpp(t, np.vstack([y3/6, y2/2, y1, y]).T)
+    pp[(1, 1)] = mkpp(t, np.vstack([y3/2, y2, y1]).T)
+    pp[(1, 2)] = mkpp(t, np.vstack([y3, y2]).T)
+
     return pp, tl
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

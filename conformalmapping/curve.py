@@ -1,11 +1,12 @@
 import numpy as np
 from . import cmt 
 
+
 class Curve(object):
     """Base class for simple planar Jordan curves
     """
 
-    def __init__(self, positionfun = None, tangentfun = None, bounds = None ):
+    def __init__(self, positionfun=None, tangentfun=None, bounds=None ):
         """Create a curve
 
         Parameters
@@ -31,7 +32,7 @@ class Curve(object):
         self._positionfun = positionfun
         self._tangentfun = tangentfun
         self._bounds = bounds
-        assert bounds != None
+        assert(bounds in not None)
 
     @property
     def bounds(self):
@@ -96,4 +97,3 @@ class Curve(object):
         zs = self.point(ts)
         # TODO - plot configuration
         plt.plot(zs.real, zs.imag, 'k-')
-

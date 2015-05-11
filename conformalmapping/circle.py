@@ -4,15 +4,16 @@ from .mobiusbase import MobiusBase, standardmap
 from .zline import Zline
 from ._compat import *
 
+
 class Circle(ClosedCurve):
     """Circle is a generalized circle class.
 
     Circle is generalized in that it can represent either a circle,
-    or a circle with infinite radius (a line). This representation 
+    or a circle with infinite radius (a line). This representation
     is necessary to make the math come out nicely.
     """
-    
-    def __init__(self, center = np.nan , radius = np.inf, line = None):
+
+    def __init__(self, center=np.nan, radius=np.inf, line=None):
         """Creates a circle with given center and radius.
 
         Parameters
@@ -31,10 +32,10 @@ class Circle(ClosedCurve):
         if type(radius) == np.ndarray:
             radius = radius[0]
         if radius < 0.0:
-            raise ValueError('Circle must have a postive radius') 
+            raise ValueError('Circle must have a postive radius')
         self._center = center
         self._radius = radius
-        self._line   = line
+        self._line = line
 
         def position(ts):
             return center + radius * np.exp(1.0j * ts)
@@ -42,9 +43,9 @@ class Circle(ClosedCurve):
         def tangent(ts):
             return 1.0j * np.exp(1.0j * ts)
 
-        super(Circle, self).__init__(positionfun = position,
-                                     tangentfun = tangent,
-                                     bounds = [0.0, 2.0 * np.pi])
+        super(Circle, self).__init__(positionfun=position,
+                                     tangentfun=tangent,
+                                     bounds=(0.0, 2.0 * np.pi))
 
     @staticmethod
     def from_points(z1, z2, z3):
@@ -70,11 +71,11 @@ class Circle(ClosedCurve):
         if np.abs(np.abs(zi) - 1) < 10*np.spacing(1):
             if np.all(np.isreal(z3)):
                 z3.sort()
-            return Circle(line = Zline(z3[:2]))
+            return Circle(line=Zline(z3[:2]))
         else:
             center = M(1.0/zi.conjugate())
             radius = np.abs(z3[0] - center)
-            return Circle( center = center, radius = radius)
+            return Circle(center=center, radius=radius)
 
     @property
     def center(self):
@@ -101,11 +102,6 @@ class Circle(ClosedCurve):
             fh.write('circle (generalized) as a line, \n')
         else:
             fh.write('circle with centre %s and radius %s,\n' % (self.center, self.radius))
-        #if self.points is None:
-            #fh.write('\n(degenerate circle)\n\n')
-        #else:
-            #fh.write('\npassing through points:\n\n')
-            #fh.write(str(self.points))
         return fh.getvalue()
 
     def __repr__(self):
@@ -129,7 +125,7 @@ class Circle(ClosedCurve):
         """True if the circle is really a line
         """
         return np.isinf(self.radius)
-    
+
     def isinside(self, z):
         """True if the point is inside the circle
 
@@ -147,5 +143,3 @@ class Circle(ClosedCurve):
             return z.imag > 0
         else:
             return np.abs(z - self._center) < self._radius
-
-

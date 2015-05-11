@@ -4,5 +4,3 @@ try:
     from StringIO import StringIO
 except:
     from io import StringIO
-
-

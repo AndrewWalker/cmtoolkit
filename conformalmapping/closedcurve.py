@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from . import cmt 
 from .curve import Curve
+
 
 class ClosedCurve(Curve):
     """Base class for simple planar Jordan curves
@@ -23,5 +23,3 @@ class ClosedCurve(Curve):
         ts = np.linspace(0.0, 1.0, 200)
         zs = self.point(ts)
         plt.plot(zs.real, zs.imag, 'k-')
-
-

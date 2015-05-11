@@ -1,3 +1,5 @@
+"""conformalmapping is a library for generating and manipulating conformal maps
+"""
 
 # Utilities
 from .homog import Homog
@@ -19,4 +21,3 @@ from .szmap import SzMap
 from .region import Region
 from .disk import Disk
 from .unitdisk import unitdisk
-

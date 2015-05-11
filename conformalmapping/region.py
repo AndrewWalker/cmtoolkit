@@ -2,20 +2,16 @@ import numpy as np
 from .closedcurve import ClosedCurve
 from . import cmt
 
+
 class Region(object):
-    """
+    """A region in the complex plane
 
     A region is defined by one or more closed curves. The interior of a
     region is defined to be to the left of the tangent vector of the closed
     curve. The exterior is the compliment of the interior.
-    
-    TBD: What does it mean for a region object to have no boundary curves?
-    Currently isempty() returns true if there are no boundary curves, which
-    is admittedly a bit ambiguously named. Do we mean an empty set for a
-    region, or do we mean the entire plane?
     """
 
-    def __init__(self, outer = None, inner = None, *args, **kwargs):
+    def __init__(self, outer=None, inner=None, *args, **kwargs):
         self._outerboundaries = self._checkcc(outer)
         self._innerboundaries = self._checkcc(inner)
 
@@ -77,7 +73,7 @@ class Region(object):
         if suitor is None:
             return []
         elif isinstance(suitor, ClosedCurve):
-            return [ suitor ]
+            return [suitor]
         else:
             for item in suitor:
                 if not isinstance(item, ClosedCurve):
@@ -112,13 +108,10 @@ class Region(object):
         # all of the boundaries (inner and outer) that make up the region.
         zi = []
         for b in self.boundaries:
-            zi.append( cmt.bb2z( b.boundbox() ) )
+            zi.append(cmt.bb2z(b.boundbox()))
         zi = np.vstack(zi)
         zi = np.max(zi, axis=0)
         return zi
-
-    def connectivity(self):
-        return self.numinner + self.numouter
 
     def __str__(self):
         if self.isempty():

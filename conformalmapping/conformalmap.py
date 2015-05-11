@@ -2,10 +2,11 @@ import matplotlib.pyplot as plt
 from .gridcurves import GridCurves
 from .cmt import plotbox
 
+
 class ConformalMap(object):
-    def __init__(self, domain = None, range = None, *args):
+    def __init__(self, domain=None, range=None, *args):
         self._domain = domain
-        self._range  = range
+        self._range = range
 
     @property
     def range(self):
@@ -20,7 +21,7 @@ class ConformalMap(object):
 
     def apply(self, z):
         if isinstance(z, GridCurves):
-            return GridCurves([ self.applyMap(c) for c in z.curves ])
+            return GridCurves([self.applyMap(c) for c in z.curves])
         else:
             return self.applyMap(z)
 

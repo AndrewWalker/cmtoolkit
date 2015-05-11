@@ -1,7 +1,8 @@
 import numpy as np
 from numpy.linalg import norm
-from .closedcurve import *
+from .closedcurve import ClosedCurve
 from .helpers import *
+
 
 class SzegoKernel(object):
     def __init__(self, curve, a, opts, **kwargs):
@@ -26,10 +27,11 @@ class SzegoKernel(object):
             IpA[i, cols] = (tmp1 - tmp2) * tmp3 * tmp4
             IpA[cols, i] = -np.conjugate(IpA[i, cols])
 
-        y = 1j * np.sqrt(np.abs(zt))/(2*np.pi) * np.conjugate(zT/(z -a))
+        y = 1j * np.sqrt(np.abs(zt))/(2*np.pi) * np.conjugate(zT/(z - a))
 
-        assert(opts.kernSolMethod in ['auto','bs'])
-        assert( N < 2048 )
+        # TODO - this is a simplification of the original method
+        assert(opts.kernSolMethod in ('auto', 'bs'))
+        assert(N < 2048)
 
         x = np.linalg.solve(IpA, y)
 
@@ -48,7 +50,7 @@ class SzegoKernel(object):
 class SzegoOpts(object):
     def __init__(self):
         self.confCenter = 0.0 + 0.0j
-        self.numCollPts  = 512
+        self.numCollPts = 512
         self.kernSolMethod = 'auto'
         self.newtonTol = 10.0 * np.spacing(2.0*np.pi)
         self.trace = False
@@ -56,10 +58,10 @@ class SzegoOpts(object):
 
 
 class Szego(object):
-    def __init__(self, curve = None, confCenter = 0.0 + 0.0j, 
-                 opts = None, *args, **kwargs):
+    def __init__(self, curve=None, confCenter=0.0 + 0.0j,
+                 opts=None, *args, **kwargs):
 
-        if not isinstance( curve, ClosedCurve):
+        if not isinstance(curve, ClosedCurve):
             raise Exception('Expected a closed curve object')
 
         self.curve = curve
@@ -68,7 +70,7 @@ class Szego(object):
         if opts is None:
             opts = SzegoOpts()
 
-        self.numCollPts = opts.numCollPts 
+        self.numCollPts = opts.numCollPts
 
         kernel = SzegoKernel(curve, confCenter, SzegoOpts())
         self.phiColl = kernel.phiColl
@@ -92,28 +94,20 @@ class Szego(object):
         z = self.zPts
         zt = self.zTan
         zT = self.zUnitTan
-        
+
         separation = 10 * np.spacing(np.max(np.abs(z)))
 
         def KS_by_idx(wi, zi):
-            """Array with k elements
-            """
+            # TODO - unflatten this expression and vectorise appropriately when 
+            #        futher testing confirms this covers all of the appropriate
+            #        cases
             z_w = z[zi] - w[wi]
-            assert( z_w.shape == (self.numCollPts,) )
             tmp1 = wt[wi]*zt[zi]
-            assert( not np.any(np.isnan(tmp1)) )
-            assert( tmp1.shape == (self.numCollPts,) )
             tmp2 = np.abs(tmp1)
-            assert( not np.any(np.isnan(tmp2)) )
-            assert( tmp2.dtype == np.float )
             tmp3 = np.sqrt(tmp2)
-            assert( not np.any(np.isnan(tmp3)) )
             tmp4 = (2j * np.pi)
-
             tmp5 = np.conjugate(wT[wi]/z_w)
-            assert( not np.any(np.isnan(tmp5)) )
             tmp6 = zT[zi]/z_w
-            assert( not np.any(np.isnan(tmp6)) )
             tmp7 = tmp5 - tmp6
             out = tmp3 / tmp4 * tmp7
             out[np.abs(z_w) < separation] = 0.0
@@ -121,7 +115,7 @@ class Szego(object):
 
         wis = np.arange(len(w))
         zis = np.arange(self.numCollPts)
-        A = [ KS_by_idx(wi, zis) for wi in wis ]
+        A = [KS_by_idx(wi, zis) for wi in wis]
         A = np.vstack(A)
         return A
 
@@ -133,18 +127,15 @@ class Szego(object):
     def psi(self, ts):
         ts = np.asarray(ts).reshape(1, -1)[0, :]
         wt = self.curve.tangent(ts)
-        assert(wt.shape == ts.shape)
         xs = self.curve.point(ts) - self.confCenter
-        assert(xs.shape == ts.shape)
         tmp1 = np.sqrt(np.abs(wt))
         y = 1.0j / (2*np.pi) / tmp1 * np.conjugate(wt / xs)
         return y
 
     def theta(self, ts):
         ts = np.asarray(ts).reshape(1, -1)[0, :]
-        ph = self.phi(ts)**2 
-        assert(ts.shape == ph.shape), ph.shape
-        th = np.angle(-1.0j * ph * self.curve.tangent(ts)) 
+        ph = self.phi(ts)**2
+        th = np.angle(-1.0j * ph * self.curve.tangent(ts))
         th = th - self.theta0
         th[ts == 0] = 0
         return th
@@ -153,14 +144,16 @@ class Szego(object):
         print(msg)
 
     @suppress_warnings
-    def invtheta(self, s, tol = None):
+    def invtheta(self, s, tol=None):
         assert(np.all(np.diff(s)) > 0)
         assert(np.all(s != 2*np.pi))
-        ntol = tol 
+        ntol = tol
         if tol is None:
             ntol = self.newtTol
 
-        f = lambda t, s : s - np.mod(self.theta(t), 2*np.pi)
+        def f(t, s):
+            return s - np.mod(self.theta(t), 2*np.pi)
+
         t = s / (2 * np.pi)
         assert(t.shape == s.shape)
 
@@ -216,8 +209,6 @@ class Szego(object):
             done[~done] = np.abs(fval[~done]) < ntol
             update[done] = 0
         self._log('Newton iteration finished in %d steps...\n' % niter)
-        maxerr = np.max(np.abs(fval))
-
         self._log('label: %d/%d points with |f| > eps, max|f| = %.4f \n\n' % (np.sum(~done), np.size(t), np.max(np.abs(fval))))
 
         return t
@@ -229,5 +220,3 @@ class Szego(object):
 
     def __str__(self):
         return 'Szego kernel object:\n\n'
-
-        

@@ -7,20 +7,20 @@
 # adapted from code by Toby Driscoll, originally 20??.
 # Python Port Copyright Andrew Walker, 2015
 import numpy as np
-import numpy.linalg
 from .conformalmap import ConformalMap
 from .homog import Homog
+
 
 class MobiusBase(ConformalMap):
     """Mobius transformation class
     """
-    def __init__(self, M = None, **kwargs):
+    def __init__(self, M=None, **kwargs):
         """Takes a 2 x 2 matrix M of doubles
         """
         if M is None:
             self._M = None
         else:
-            assert( M.shape == (2,2) ) 
+            assert(M.shape == (2, 2))
             self._M = M
         super(MobiusBase, self).__init__(**kwargs)
 
@@ -42,7 +42,7 @@ class MobiusBase(ConformalMap):
             z0 = complex(z)
             z = Homog(z0)
             Z = np.array([[z.numerator, z.denominator]], dtype=np.complex).T
-            W = np.dot( self._M, Z )
+            W = np.dot(self._M, Z)
             w = Homog(W[0], W[1])
             w = w.__complex__()
             return w
@@ -53,11 +53,12 @@ class MobiusBase(ConformalMap):
         A = self._M
         z = Homog(-A[1, 1], A[1, 0])
         return z.__complex__()
- 
+
     def zero(self):
         A = self._M
-        z = Homog(-A[0,2], A[0,0])
+        z = Homog(-A[0, 2], A[0, 0])
         return z.__complex__()
+
 
 def standardmap(z):
     # make sure that it's an array
@@ -75,7 +76,4 @@ def standardmap(z):
     else:
         rms = z[1] - z[2]
         rmq = z[1] - z[0]
-        return np.array([[rms, -z[0]*rms],[rmq, -z[2]*rmq]])
-
-
-
+        return np.array([[rms, -z[0]*rms], [rmq, -z[2]*rmq]])
