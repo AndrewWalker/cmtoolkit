@@ -34,7 +34,7 @@ class Splinep(ClosedCurve):
 
         super(Splinep, self).__init__(positionfun=position,
                                       tangentfun=tangent,
-                                      bound =(0.0, 1.0))
+                                      bounds=(0.0, 1.0))
 
         self.ppArray = ppArray
         self.chordalArcLength = chordalArcLength

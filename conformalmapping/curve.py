@@ -32,7 +32,7 @@ class Curve(object):
         self._positionfun = positionfun
         self._tangentfun = tangentfun
         self._bounds = bounds
-        assert(bounds in not None)
+        assert(bounds is not None)
 
     @property
     def bounds(self):
