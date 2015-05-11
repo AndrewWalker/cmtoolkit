@@ -17,7 +17,7 @@ else:
 
 setup(
     name         = 'cmtoolkit',
-    version      = '0.0.1',
+    version      = '0.0.2',
     description  = 'Conformal Mapping Toolkit (ported to Python)',
     long_description = read('README.rst'),
     author       = 'Andrew Walker',
@@ -28,7 +28,7 @@ setup(
     classifiers  = [
         'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: BSD License',
         'Topic :: Scientific/Engineering :: Mathematics',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
